@@ -16,7 +16,7 @@
 
 
     <div v-else class="jogo"> 
-      <h2 v-if="acertou">Você acertou! Parabéns! Número de Tentativas: {{ this.tentativas }}</h2>
+      <h2 v-if="acertou">Você acertou! Parabéns! Número de Erros: {{ this.tentativas }}</h2>
         <h2 v-else>Você errou. A cidade correta era: {{ cidadeFinal }}</h2>
         <button v-on:click="reiniciarJogo" class="difficulty-button">Reiniciar</button>
         <button v-on:click="voltarInicioJogo" class="difficulty-button">Início</button>
