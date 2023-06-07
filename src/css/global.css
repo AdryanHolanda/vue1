@@ -106,3 +106,64 @@ img{
   align-items: center;
   gap: 10px;
 }
+
+.palavra-letras{
+  display:flex;
+  flex-direction: row;
+  
+}
+
+.palavra-letra{
+  text-transform: uppercase;
+  
+  justify-content: center;
+  align-items: center;
+  margin: 0px 5px;
+  width: 30px;
+  height: 30px;
+  display: flex;
+}
+
+
+
+
+.teclado{
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  width: 40%;
+  margin-top: 20px;
+}
+
+.teclado-botao{
+  text-transform: uppercase;
+  margin: 5px;
+  background-color: var(--color-background-button);
+  color: var(--color-text-light);
+  padding: 5px 10px;
+  font-weight: bold;
+  font-family: "Comic Sans MS";
+  font-size: 15px;
+  cursor: pointer;
+  border: none;
+  border-radius: 10px;
+}
+
+.teclado-botao:hover{
+  background-color: var(--color-text-light);
+}
+
+.teclado-botao:focus{
+  outline: none;
+}
+
+.teclado-botao:active{
+  background-color: var(--color-text-light);
+}
+
+.teclado-botao:disabled{
+  opacity: 0.2;
+  pointer-events: none;
+}
+

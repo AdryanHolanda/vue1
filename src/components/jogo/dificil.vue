@@ -13,7 +13,9 @@
       </div>   
     </div>
     <div v-else class="jogo"> 
-      <h2 v-if="acertou">Você acertou! Parabéns! Número de Erros: {{ this.tentativas }}</h2>
+      <img :src="imagemForca" :key="imagemForca">
+
+      <h2 v-if="acertou">Você acertou! Parabéns! A cidade era: {{cidadeFinal}}<br/> Número de Erros: {{ this.tentativas }}</h2>
         <h2 v-else>Você errou. A cidade correta era: {{ cidadeFinal }}</h2>
         <button v-on:click="reiniciarJogo" class="difficulty-button">Reiniciar</button>
         <button v-on:click="voltarInicioJogo" class="difficulty-button">Início</button>
@@ -218,6 +220,16 @@
         errou:false,
         tentativas:0,
         telajogo: 'inicio',
+        imagensForca:[
+        require("../../image/0.svg"),
+        require("../../image/1.svg"),
+        require("../../image/2.svg"),
+        require("../../image/3.svg"),
+        require("../../image/4.svg"),
+        require("../../image/5.svg"),
+        require("../../image/6.svg"),
+
+        ],
       };
     },
     mounted() {
@@ -225,8 +237,8 @@
     },
     computed: {
       imagemForca() {
-        return require("../../image/" +this.tentativas+".svg");
-      } },
+        return this.imagensForca[this.tentativas];
+      }, },
     methods: {
       selecionarCidade(){
       const palavraAleatoria = Math.floor(Math.random()*this.cidadesCeara.length);
@@ -239,7 +251,7 @@
         this.telajogo='telafinal';
       }else{
         this.tentativas++;
-        if(this.tentativas===7){
+        if(this.tentativas===6){
           this.errou=true;
           this.telajogo='telafinal';
         }

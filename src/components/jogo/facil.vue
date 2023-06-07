@@ -4,19 +4,55 @@
       
         <img :src="imagemForca" :key="imagemForca">
       
-        <h2>Descubra a cidade: {{ palavraOculta}}</h2>
+        <h2>Descubra a cidade do Ceará!</h2>
         <div class="jogo">
-        <input v-model="inputValue" type="text" class="input" placeholder="Digite o nome da cidade"/>
-        <button v-on:click="verificarChute" :disabled="inputValue.length === 0" class="difficulty-button">{{ botao }}</button>
+       <!-- <input v-model="inputValue" 
+        type="text" class="input"
+         placeholder="Digite o nome da cidade"/> -->
 
+
+        <div class="palavra-letras">
+
+        <div class="palavra-letra" v-for="(letra,key) in cidadeFinal" :key="key">
+          
+          <h2>{{ (verificarLetra(letra) || errou == true) ? letra : '_' }}</h2>
+     
+        </div>
+
+        </div>
+
+       <tecladoVirtual 
+          :letras="letras"
+           :verificarLetra="verificarLetra"
+           :jogarLetra="jogarLetra"
+            />
+
+       <!-- <button v-on:click="verificarChute" 
+        :disabled="inputValue.length === 0" class="difficulty-button">
+        {{ botao }}
+      </button> -->
+        
       
         </div>
       </div>   
+    
+      
+        
     </div>
 
 
     <div v-else class="jogo"> 
-      <h2 v-if="acertou">Você acertou! Parabéns! Número de Erros: {{ this.tentativas }}</h2>
+      <img :src="imagemForca" :key="imagemForca">
+      <div class="palavra-letras">
+
+    <div class="palavra-letra" v-for="(letra,key) in cidadeFinal" :key="key">
+  
+  <h2>{{ (verificarLetra(letra) || errou == true) ? letra : '_' }}</h2>
+
+</div>
+
+</div>
+      <h2 v-if="acertou">Você acertou! Parabéns! A cidade era: {{cidadeFinal}}<br/> Número de Erros: {{ this.tentativas }}</h2>
         <h2 v-else>Você errou. A cidade correta era: {{ cidadeFinal }}</h2>
         <button v-on:click="reiniciarJogo" class="difficulty-button">Reiniciar</button>
         <button v-on:click="voltarInicioJogo" class="difficulty-button">Início</button>
@@ -24,12 +60,18 @@
   </template>
   
   <script>
+
+  import tecladoVirtual from '../teclado.vue';
+  import diacriticless from '../../../node_modules/diacriticless/diacriticless';
+
+
   export default {
     name: 'jogoForcaFacil',
   
     data() {
       return {
         cidadesCeara : [
+          
   "Abaiara",
   "Acarape",
   "Acaraú",
@@ -217,11 +259,23 @@
 ],
         inputValue: "",
         cidadeFinal:"",
+        cidadeSemEspacos:"",
         botao: 'Enviar',
         acertou: false,
         telajogo:"inicio",
         errou:false,
         tentativas:0,
+        letrasTeclado:[''],
+        imagensForca:[
+        require("../../image/0.svg"),
+        require("../../image/1.svg"),
+        require("../../image/2.svg"),
+        require("../../image/3.svg"),
+        require("../../image/4.svg"),
+        require("../../image/5.svg"),
+        require("../../image/6.svg"),
+
+        ],
       };
     },
    
@@ -233,17 +287,21 @@
     },
     computed: {
       imagemForca() {
-        return require("../../image/" +this.tentativas+".svg");
-      } },
+        return this.imagensForca[this.tentativas];
+      },
+      
+    },
     methods: {
       selecionarCidade(){
       const palavraAleatoria = Math.floor(Math.random()*this.cidadesCeara.length);
       this.cidadeFinal=this.cidadesCeara[palavraAleatoria];
-      this.ocultarPalavra();
+      this.cidadeSemEspacos = this.cidadeFinal.replace(/\s/g, '');
+
+      //this.ocultarPalavra();
       
     },
 
-    ocultarPalavra(){
+    /*ocultarPalavra(){
       const totalLetras = this.cidadeFinal.length;
       let letrasSubtrair;
       if(totalLetras<=4){
@@ -273,21 +331,40 @@
      
   
   
-  },
+  },*/
+    verificarLetra(letra){
+      
+      return this.letrasTeclado.find(item=>diacriticless(item).toLowerCase()===diacriticless(letra).toLowerCase());
+    },
 
+    jogarLetra(letra){
+        this.letrasTeclado.push(letra);
+        this.verificarChute(letra);
+    },
 
-    verificarChute(){
-      if (this.inputValue.normalize('NFD').toLowerCase()===this.cidadeFinal.normalize('NFD').toLowerCase()){
-        this.acertou=true;
-        this.telajogo="telafinal";
+    verificarChute(letra){
+      if (this.cidadeFinal.toLowerCase().indexOf(letra.toLowerCase())>=0){
+       
+       return this.verificarAcertos()
+        
       }else{
         this.tentativas++;
-        if(this.tentativas===7){
+        if(this.tentativas===6){
           this.errou=true;
           this.telajogo="telafinal";
         }
       }
     },
+
+    verificarAcertos() {
+ 
+  const letrasUnicas = [...new Set(this.cidadeSemEspacos.split(''))];
+
+  if (letrasUnicas.length === (this.letrasTeclado.length - this.tentativas)) {
+    this.acertou = true;
+    this.telajogo = 'telafinal';
+  }
+},
 
     reiniciarJogo(){
       this.acertou=false;
@@ -296,12 +373,19 @@
       this.tentativas=0;
       this.telajogo="inicio"
       this.selecionarCidade();
+      this.letrasTeclado=[''];
+      
+
     },
 
     voltarInicioJogo(){
       this.$emit('voltarInicio');
     }
 
+    },
+
+    components:{
+      tecladoVirtual
     }
   }
   </script>
