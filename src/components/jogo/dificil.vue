@@ -1,22 +1,39 @@
 <template>
+
+  <!--aqui temos basicamente a mesam coisa do facil.vue alterando o modo de jogo apenas-->
   <div v-if="telajogo=='inicio'">
     <div class="jogo">
    
         <img :src="imagemForca" :key="imagemForca">
-      
+      <!--nota-se que a única dica que o player tem é a primeira letra contida na variável
+      cidadeFinal, sendo chamada por cidadeFinal[0], que é o componente que está na
+    posição 0 da palavra contida em cidadeFinal, ou seja, a primeira letra-->
         <h2>Dica: A cidade começa com a letra "{{ cidadeFinal[0] }}"</h2>
         <div class="jogo">
+
+          <!--nesse caso aqui, temos algo mais simples para o programador, porém
+          mais complexo para o player, temos um input, para digitar o nome completo
+        da cidade.-->
         <input v-model="inputValue" type="text" class="input" placeholder="Digite o nome da cidade"/>
+
+        <!--aqui temos um botão para enviar a palavra, para quando você já tiver digitado
+        ele enviar a palavra para verificar se é a mesma palavra que está em cidadeFinal, o botão é desabilitado, caso
+      o inputValue esteja vazio, que é a variável contida no input, sendo chamada pela diretiva v-model -->
         <button v-on:click="verificarChute" :disabled="inputValue.length === 0" class="difficulty-button">{{ botao }}</button>
         </div>
 
       </div>   
     </div>
     <div v-else class="jogo"> 
+
+      <!--aqui temos a mesma coisa, um v-if, para o inicio do jogo, e um v-else para o final do jogo
+      um v-if para acerto, e um v-else para erro-->
       <img :src="imagemForca" :key="imagemForca">
 
       <h2 v-if="acertou">Você acertou! Parabéns! A cidade era: {{cidadeFinal}}<br/> Número de Erros: {{ this.tentativas }}</h2>
         <h2 v-else>Você errou. A cidade correta era: {{ cidadeFinal }}</h2>
+
+        <!--botões para reiniciar o jogo, ou voltar para selecionar a dificuldade-->
         <button v-on:click="reiniciarJogo" class="difficulty-button">Reiniciar</button>
         <button v-on:click="voltarInicioJogo" class="difficulty-button">Início</button>
       </div>  
@@ -26,193 +43,12 @@
   export default {
     name: 'jogoForcaDificil',
   
+
+    //declarando as variáveis que serão utilizadas
     data() {
       return {
         cidadesCeara : [
-  "Abaiara",
-  "Acarape",
-  "Acaraú",
-  "Acopiara",
-  "Aiuaba",
-  "Alcântaras",
-  "Altaneira",
-  "Alto Santo",
-  "Amontada",
-  "Antonina do Norte",
-  "Apuiarés",
-  "Aquiraz",
-  "Aracati",
-  "Aracoiaba",
-  "Ararendá",
-  "Araripe",
-  "Aratuba",
-  "Arneiroz",
-  "Assaré",
-  "Aurora",
-  "Baixio",
-  "Banabuiú",
-  "Barbalha",
-  "Barreira",
-  "Barro",
-  "Barroquinha",
-  "Baturité",
-  "Beberibe",
-  "Bela Cruz",
-  "Boa Viagem",
-  "Brejo Santo",
-  "Camocim",
-  "Campos Sales",
-  "Canindé",
-  "Capistrano",
-  "Caridade",
-  "Cariré",
-  "Caririaçu",
-  "Cariús",
-  "Carnaubal",
-  "Cascavel",
-  "Catarina",
-  "Catunda",
-  "Caucaia",
-  "Cedro",
-  "Chaval",
-  "Choró",
-  "Chorozinho",
-  "Coreaú",
-  "Crateús",
-  "Crato",
-  "Croatá",
-  "Cruz",
-  "Deputado Irapuan Pinheiro",
-  "Ererê",
-  "Eusébio",
-  "Farias Brito",
-  "Forquilha",
-  "Fortaleza",
-  "Fortim",
-  "Frecheirinha",
-  "General Sampaio",
-  "Graça",
-  "Granja",
-  "Granjeiro",
-  "Groaíras",
-  "Guaiúba",
-  "Guaraciaba do Norte",
-  "Guaramiranga",
-  "Hidrolândia",
-  "Horizonte",
-  "Ibaretama",
-  "Ibiapina",
-  "Ibicuitinga",
-  "Icapuí",
-  "Icó",
-  "Iguatu",
-  "Independência",
-  "Ipaporanga",
-  "Ipaumirim",
-  "Ipu",
-  "Ipueiras",
-  "Iracema",
-  "Irauçuba",
-  "Itaiçaba",
-  "Itaitinga",
-  "Itapagé",
-  "Itapipoca",
-  "Itapiúna",
-  "Itarema",
-  "Itatira",
-  "Jaguaretama",
-  "Jaguaribara",
-  "Jaguaribe",
-  "Jaguaruana",
-  "Jardim",
-  "Jati",
-  "Jijoca de Jericoacoara",
-  "Juazeiro do Norte",
-  "Jucás",
-  "Lavras da Mangabeira",
-  "Limoeiro do Norte",
-  "Madalena",
-  "Maracanaú",
-  "Maranguape",
-  "Marco",
-  "Martinópole",
-  "Massapê",
-  "Mauriti",
-  "Meruoca",
-  "Milagres",
-  "Milhã",
-  "Miraíma",
-  "Missão Velha",
-  "Mombaça",
-  "Monsenhor Tabosa",
-  "Morada Nova",
-  "Moraújo",
-  "Morrinhos",
-  "Mucambo",
-  "Mulungu",
-  "Nova Olinda",
-  "Nova Russas",
-  "Novo Oriente",
-  "Ocara",
-  "Orós",
-  "Pacajus",
-  "Pacatuba",
-  "Pacoti",
-  "Pacujá",
-  "Palhano",
-  "Palmácia",
-  "Paracuru",
-  "Paraipaba",
-  "Parambu",
-  "Paramoti",
-  "Pedra Branca",
-  "Penaforte",
-  "Pentecoste",
-  "Pereiro",
-  "Pindoretama",
-  "Piquet Carneiro",
-  "Pires Ferreira",
-  "Poranga",
-  "Porteiras",
-  "Potengi",
-  "Potiretama",
-  "Quiterianópolis",
-  "Quixadá",
-  "Quixelô",
-  "Quixeramobim",
-  "Quixeré",
-  "Redenção",
-  "Reriutaba",
-  "Russas",
-  "Saboeiro",
-  "Salitre",
-  "Santa Quitéria",
-  "Santana do Acaraú",
-  "Santana do Cariri",
-  "São Benedito",
-  "São Gonçalo do Amarante",
-  "São João do Jaguaribe",
-  "São Luís do Curu",
-  "Senador Pompeu",
-  "Senador Sá",
-  "Sobral",
-  "Solonópole",
-  "Tabuleiro do Norte",
-  "Tamboril",
-  "Tarrafas",
-  "Tauá",
-  "Tejuçuoca",
-  "Tianguá",
-  "Trairi",
-  "Tururu",
-  "Ubajara",
-  "Umari",
-  "Umirim",
-  "Uruburetama",
-  "Uruoca",
-  "Varjota",
-  "Várzea Alegre",
-  "Viçosa do Ceará",
+  'Juazeiro do Norte'
 ],
         inputValue: "",
         cidadeFinal:"",
@@ -232,6 +68,9 @@
         ],
       };
     },
+
+    //aqui o método selecionar cidade é chamado quando o componente é montado, poderia
+    //ser que nem em facil.vue, created, mas aqui eu decidi colocar quando ele é montado
     mounted() {
       this.selecionarCidade();
     },
@@ -240,11 +79,18 @@
         return this.imagensForca[this.tentativas];
       }, },
     methods: {
+      //metódo para selecionar cidade aleatória
       selecionarCidade(){
       const palavraAleatoria = Math.floor(Math.random()*this.cidadesCeara.length);
       this.cidadeFinal=this.cidadesCeara[palavraAleatoria];
     },
 
+
+    //esse método para verificar o chute é mais simples, ele verifica se a palavra contida em inputValue,
+    //que é a variável que está sendo chamada pelo input, que é alterada automáticamente
+    //verifica se a palavra que está nela é a mesma que está em cidadeFinal, se for, ele só valida
+    //e altera acertou para true, exibindo a tela final, caso não seja, ele retorna
+    //tentativas++, e se o número de tentativas chegar em 6, o player é enforcado
     verificarChute(){
       if (this.inputValue.normalize('NFD').toLowerCase()===this.cidadeFinal.normalize('NFD').toLowerCase()){
         this.acertou=true;
@@ -257,7 +103,7 @@
         }
       }
     },
-
+//zerando as variáveis para reiniciar o jogo
     reiniciarJogo(){
       this.acertou=false;
       this.errou=false;
@@ -266,6 +112,8 @@
       this.telajogo='inicio';
       this.selecionarCidade();
     },
+
+    //alterar a tela para o inicio do jogo, selecionar as dificuldades.
      voltarInicioJogo(){
       this.$emit('voltarInicio');
     },

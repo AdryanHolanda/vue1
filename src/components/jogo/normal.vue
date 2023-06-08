@@ -4,6 +4,10 @@
       
         <img :src="imagemForca" :key="imagemForca">
       
+
+        <!--aqui em normal a única diferença que temos é que, temos a função palavra oculta,
+        ela é chamada aqui no h2 para ser exibida, com algumas letras faltando, para que o player
+      adivinhe a palavra -->
         <h2>Descubra a cidade: {{ palavraOculta}}</h2>
         <div class="jogo">
         <input v-model="inputValue" type="text" class="input" placeholder="Digite o nome da cidade"/>
@@ -248,6 +252,9 @@
         return this.imagensForca[this.tentativas];
       }, },
     methods: {
+
+      //no método selecionar cidade, agora temos a chamada da função ocultarPalavra(), para assim que ele selecionar a cidade, ele já
+      //alterar a palavra que foi selecionada e ocultar algumas letras
       selecionarCidade(){
       const palavraAleatoria = Math.floor(Math.random()*this.cidadesCeara.length);
       this.cidadeFinal=this.cidadesCeara[palavraAleatoria];
@@ -255,6 +262,11 @@
       
     },
 
+
+    //ocultar palavra ele pega a variável cidadeFinal, e o comprimento dela, e atribui a variável totalletras
+    //e entra o if e else, se totalLetras for menor ou igual a 4, letras a subtrair, só irá receber o valor 2
+    //que serão duas letras a subtrair,
+    //se não ele receberá 3, que irá subtrair 3 letras da palvra, no caso ocultar 3 letras.
     ocultarPalavra(){
       const totalLetras = this.cidadeFinal.length;
       let letrasSubtrair;
@@ -267,20 +279,28 @@
 
 
 
-
+// aqui temos um while para enquando a variável  letrasOcultasRepeat.lenght for menor que letrassubtrair, ele continuará fazendo executando.
+//no caso se letras subtrair for igual a 3, ele executará 3 vezes isso. ocultando assim 3 letras.
       while (letrasOcultasRepeat.length<letrasSubtrair){
+
+        //aqui ele seleciona um número aleatório com base no comprimento da cidade final
       const letraRandom = Math.floor(Math.random()*this.cidadeFinal.length);
 
+      
         if(!letrasOcultasRepeat.includes(letraRandom)){
           letrasOcultasRepeat.push(letraRandom);
         } }
-
+//aqui ele transforma cidadeFinal em letras
        const transfLetra = this.cidadeFinal.split("");
-
+//esse número aleatório será o indice, ou seja, a posição da palavra de cidadeFinal,
+// que agora é transfLetra que é um array com letras, no caso ele transformará alguma letra aleatória em "_"
+// no caso a letra aleatória será escolhida pelo número aleatório tirado antes, que ele foi
+//colocado para ser o número da posição do array:  transfLetra[posição]="_"
        letrasOcultasRepeat.forEach(letraRandom =>{
         transfLetra[letraRandom]="_";
        })
       
+       //após isso ele junta a palavra novamente, e coloca a palavra em palavra oculta. 
       this.palavraOculta=transfLetra.join("");
      
   

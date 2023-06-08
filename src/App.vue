@@ -3,6 +3,8 @@
 
 <h1>QuiZ!</h1>
 
+<!--Tela principal, v-if para alterar a tela de acordo com a dificuldade selecionada-->
+
 <section v-if="tela=='inicio'" id="inicio">
 <difficultyComp @jogoFacil="jogoFacil" @jogoNormal="jogoNormal" @jogoDificil="jogoDificil"/>
 </section>
@@ -29,6 +31,8 @@
 
 <script>
 
+//importando os componentes externos utilizados no jogo
+
 import '../src/css/global.css';
 import difficultyComp from './components/dificuldade.vue';
 import jogoForcaFacil from './components/jogo/facil.vue';
@@ -44,12 +48,19 @@ export default {
    data(){
     return{
 
+// No app, ele iniciará com o valor de tela='inicio'
+// Para que quando for alterado para outro valor
+// Ele altere a tela para o que foi pedido
+
   tela:'inicio',
 
 
     }
   },
   methods:{
+
+    //funcões para alterar a tela, essas funções serão chamadas no dificuldade.vue
+
     jogoFacil(){
         if(this.tela=='inicio'){this.tela='facil'}
         else{
@@ -72,6 +83,8 @@ export default {
 
     },
 
+    //função para voltar ao inicio para selecionar novamente as dificuldades
+
     voltarInicio(){
       if(this.tela!=='inicio'){
         this.tela='inicio'
@@ -83,6 +96,9 @@ export default {
         
    
   },
+
+//declarando os componentes que foram utilizados
+
   components:{
     difficultyComp,
     jogoForcaFacil,
